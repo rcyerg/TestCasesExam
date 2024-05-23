@@ -39,7 +39,12 @@ class SocialHandlerTest {
 
     @Test
     void noAddingBlankCharactersTest(){
-        assertFalse(socialHandler.checkHandle(" abcd efg"));
+        assertFalse(socialHandler.checkHandle(" asdf a"));
+    }
+
+    @Test
+    void noEmptyHandleTest(){
+        assertFalse(socialHandler.checkHandle(""));
     }
 
     @Test
