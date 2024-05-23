@@ -1,15 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SocialHandler {
 
-    private ArrayList<String> handles;
+    private TreeMap<Integer, String> handles;
+
+    private static Integer idIterator = 0;
 
     public SocialHandler() {
-        this.handles = new ArrayList<>();
+        this.handles = new TreeMap<>();
     }
 
-    public ArrayList<String> getHandles(){
+    public TreeMap<Integer, String> getHandles() {
         return this.handles;
     }
 
@@ -22,17 +25,17 @@ public class SocialHandler {
         try {
             handleGood = checkHandle(handleToAdd);
 
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("(!) New handle cannot be null!");
 
         }
 
         if (handleGood) {
             String newHandle = "@" + handle.toLowerCase();
-            if (!handles.contains(newHandle)) {
-                handles.add(newHandle);
+            if (!this.handles.containsValue(newHandle)) {
+                this.handles.put(idIterator, newHandle);
+                idIterator++;
                 System.out.println("Created new handle: " + newHandle);
-
             } else {
                 System.out.println("(!) Handle: " + newHandle + " already exists!");
 
@@ -52,8 +55,37 @@ public class SocialHandler {
         return true;
     }
 
+    public void removeHandle(String handleToRemove) {
+        if (!this.handles.containsValue(handleToRemove)) {
+            System.out.println("(!) Handle does not exist!");
+        } else {
+            for (Map.Entry<Integer, String> entry : this.handles.entrySet()){
+                if (entry.getValue().equals(handleToRemove)){
+                    this.handles.remove(entry.getKey());
+                    System.out.println("Removed handle: " + handleToRemove);
+                    break;
+                }
+            }
+        }
+    }
 
-    public static void main(String[] args) {
-
+    public void updateHandle(String handleToUpdate, String handleToReplaceWith){
+        boolean newHandleGood = false;
+        if (this.handles.containsValue(handleToUpdate)){
+            newHandleGood = checkHandle(handleToReplaceWith);
+        } else {
+            System.out.println("(!) Handle to update does not exist!");
+        }
+        if (newHandleGood){
+            for (Map.Entry<Integer, String> entry : this.handles.entrySet()) {
+                if (entry.getValue().equals(handleToUpdate)) {
+                    handleToReplaceWith = "@" + handleToReplaceWith;
+                    this.handles.replace(entry.getKey(), handleToReplaceWith);
+                    System.out.println("Updated handle: " + handleToUpdate + " successfully.");
+                    System.out.println("New handle: " + handleToReplaceWith);
+                    break;
+                }
+            }
+        }
     }
 }

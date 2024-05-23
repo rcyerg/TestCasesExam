@@ -2,6 +2,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class SocialHandlerTest {
 
         socialHandler = new SocialHandler();
 
-        assertInstanceOf(ArrayList.class, socialHandler.getHandles());
+        assertInstanceOf(TreeMap.class, socialHandler.getHandles());
     }
 
     @Test
@@ -40,4 +41,32 @@ class SocialHandlerTest {
     void noAddingBlankCharactersTest(){
         assertFalse(socialHandler.checkHandle(" abcd efg"));
     }
+
+    @Test
+    void removeHandleTest(){
+
+        socialHandler.addHandle("asdfgjklm");
+        socialHandler.addHandle("qwertyuio");
+
+        socialHandler.removeHandle("@asdfgjklm");
+
+        assertFalse(socialHandler.getHandles().containsValue("@asdfgjklm"));
+        assertEquals(1, socialHandler.getHandles().size());
+    }
+
+    @Test
+    void updateHandleTest(){
+
+        socialHandler.addHandle("asdfgjklm");
+        socialHandler.addHandle("qwertyuio");
+
+        socialHandler.updateHandle("@asdfgjklm", "zxcvbbnm");
+        assertFalse(socialHandler.getHandles().containsValue("@asdfgjklm"));
+        assertTrue(socialHandler.getHandles().get(0).equals("@zxcvbbnm"));
+
+
+        socialHandler.updateHandle("@qwertyuio", " sdlfkjw");
+        assertTrue(socialHandler.getHandles().containsValue("@qwertyuio"));
+    }
 }
+
